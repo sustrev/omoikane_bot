@@ -3,7 +3,22 @@ Discord bot to implement Monte Cook's Cypher TTRPG as well as a few other fun, e
 
 ## Discord Bot Functions
 To comply with Discord's bot interaction best practices, all bot functions are called via slash command and/or button integration. The following commands are available:
-* Insert a rundown here!
+* /ability is a lookup utility for all abilities in the Cypher core rulebook. Please note that this is case-sensitive and spelling counts. The one exception is the ability "Blessings of the Gods" because the ability description is too verbose for Discord. 
+* /advance manages the four advancements per tier. It keeps track of which type of advancement was taken, doesn't allow duplicates, and appropriately subtracts XP from a player's total. Once four advancements have been taken, advances tier level.
+* /cypher rolls a random cypher and level from a list of cyphers; the file `Cypher/Cyphers.csv` is what this is set to pull from. Currently, I'm using custom-made cinematic-flavored cyphers with ideas pulled from a selection of cypher cards from Metal Weave Games' "Subtle Cyphers Based on TV Tropes" with additional influence from tvtropes.com.
+* /dice rolls xdx dice and provides a single numerical value. It does not break down full dice results, but it *does* add a bit of text when a "1" is rolled.
+* /drip begins a first in-first out feed of the file `Assets/dripper.txt`, and then generates a "More!" button to iterate through the file line-by-line. I use this to "drip" world lore throughout the week to assist with engagement in the game server. Currently, this file includes text from a currently-running game.
+* /edit_abilities brings up a modal form with current abilities filled in and allows for players to edit their list of abilities.
+* /edit_inventory brings up a modal form with current inventory filled in and allows for players to edit their inventory (cyphers and equipment).
+* /edit_notes brings up a modal form with current notes filled in and allows for players to edit their notes.
+* /edit_skills brings up a modal form with current skills filled in and allows for players to edit their skills (trained, specialized, and inability).
+* /recover allows players to regain points in their might, speed, or intellect pools after a rest or recovery ability. It does not allow a player to recover more points than their maximum pool value.
+* /rest rolls 1d6 + character tier level. It does not track abilities/advancements that add additional recovery points per rest.
+* /roll rolls a d20 with a Cypher-related printout. This can be used as a straight d20 roll without modifiers, or it can be used to calculate the roll with difficulty, training, assets, and effort. 
+* /sheet pulls up a 5 page character sheet with a dropdown menu and button navigation. This is locked to the user who calls the function.
+* /spend allows players to track points (might, speed, intellect, and XP) for ability and effort use, re-rolls, and taking damage.
+* /status pulls up just the first page of the character sheet for current stats without the additional navigation to other pages, for quick reference.
+* /xp awards XP! 
 
 ## Requirements
 This bot repository leans heavily on Python, Pandas, and local files. The following libraries must be installed for the bot to run properly:
