@@ -277,7 +277,7 @@ async def xp(ctx: interactions.CommandContext, character: str, amount: int):
         ),
         interactions.Option(
             name="other",
-            description="If taking another advancement option from the rulebook, this isn't being tracked yet. Type whatever, just don't leave it blank.",
+            description="If taking other advancement option, this isn't being tracked yet. Type anything (not blank!).",
             type=interactions.OptionType.STRING,
             required=False,
         ),
