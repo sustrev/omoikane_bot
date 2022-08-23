@@ -561,7 +561,7 @@ def setup_character(name, full_name, desc, ctype, focus, flavor = "", m = 8, s =
     char_df = pd.DataFrame.from_dict(data=d)
     new_character_df = character_df.append(char_df, ignore_index=True)
     new_character_df.to_excel(character_sheet_path, index=False)
-    return("New character added!")
+    return("New character added! Please edit skills, abilities, and inventory from their respective slash commands.")
 
 # Edit character sheet
 

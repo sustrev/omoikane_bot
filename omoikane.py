@@ -305,7 +305,87 @@ async def rest(ctx: interactions.CommandContext, character: str):
     await ctx.send(output)
 
 # Set up a new character sheet
-# I want to use a FORM for this. That would be cool!
+@bot.command(
+    name="setup",
+    description="Create a new character",
+    options = [
+        interactions.Option(
+            name="name",
+            description="Short name (for lookups)",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+        interactions.Option(
+            name="full_name",
+            description="Full name",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+        interactions.Option(
+            name="descriptor",
+            description="Descriptor",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+        interactions.Option(
+            name="ctype",
+            description="Type",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+        interactions.Option(
+            name="focus",
+            description="Focus",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+        interactions.Option(
+            name="flavor",
+            description="Flavor",
+            type=interactions.OptionType.STRING,
+            required=False,
+        ),
+        interactions.Option(
+            name="might",
+            description="Might Pool",
+            type=interactions.OptionType.INTEGER,
+            required=False,
+        ),
+        interactions.Option(
+            name="speed",
+            description="Speed Pool",
+            type=interactions.OptionType.INTEGER,
+            required=False,
+        ),
+        interactions.Option(
+            name="intellect",
+            description="Intellect Pool",
+            type=interactions.OptionType.INTEGER,
+            required=False,
+        ),
+        interactions.Option(
+            name="might_edge",
+            description="Might Edge",
+            type=interactions.OptionType.INTEGER,
+            required=False,
+        ),
+        interactions.Option(
+            name="speed_edge",
+            description="Speed Edge",
+            type=interactions.OptionType.INTEGER,
+            required=False,
+        ),
+        interactions.Option(
+            name="intellect_edge",
+            description="Intellect Edge",
+            type=interactions.OptionType.INTEGER,
+            required=False,
+        ),
+    ],
+)
+async def setup(ctx: interactions.CommandContext, name: str, full_name: str, descriptor: str, ctype: str, focus: str, flavor:str = "", might: int=8, speed: int=8, intellect: int=8, might_edge:int=0, speed_edge:int=0, intellect_edge:int=0):
+    output = cypher.setup_character(name=name, full_name=full_name, desc=descriptor, ctype=ctype, focus=focus, flavor = flavor, m = might, s = speed, i = intellect, m_e = might_edge, s_e = speed_edge, i_e = intellect_edge)
+    await ctx.send(output)
 
 # Edit character sheet
 # Edit Skills
