@@ -1,0 +1,4 @@
+pandas
+interactions-py
+interactions.ext.paginator
+nltk

@@ -1,44 +1,19 @@
 import interactions
-import cypher
-import character_sheet
 from interactions.ext.paginator import Page, Paginator
 import random
 import asyncio
 
-token = 'OTU1OTIyNDAxODEwNTg3NzA5.YjouHA.vF0zcFkl9ko1iQNfjhT8W6P8mbM'
-bot = interactions.Client(token=token)
-guild_id=953355201824325722
+import cypher
+import fun
+import secrets
 
-@bot.command(
-    name="roll_cypher",
-    description="Rolls a random tropey cypher",
-    scope=guild_id,
-)
-async def roll_cypher(ctx: interactions.CommandContext):
-    output = cypher.print_cypher()
-    await ctx.send(output)
-    
-@bot.command(
-    name="ability",
-    description="Ability lookup",
-    scope=guild_id,
-    options = [
-        interactions.Option(
-            name="text",
-            description="What ability?",
-            type=interactions.OptionType.STRING,
-            required=True,
-        ),
-    ],
-)
-async def ability(ctx: interactions.CommandContext, text: str):
-    output = cypher.print_ability(text)
-    await ctx.send(output)
-    
+token = secrets.token()
+bot = interactions.Client(token=token)
+
+# Roll a d20 with Cypher formatting
 @bot.command(
     name="roll",
     description="Roll for it!",
-    scope=guild_id,
     options = [
         interactions.Option(
             name="difficulty",
@@ -63,18 +38,69 @@ async def ability(ctx: interactions.CommandContext, text: str):
             description="How much effort are you putting in?",
             type=interactions.OptionType.INTEGER,
             required=False,
-        ),
-        
+        ), 
     ],
 )
 async def roll(ctx: interactions.CommandContext, difficulty: int = 0, training: int = 0, assets: int = 0, effort: int = 0):
     output = cypher.print_roll(difficulty, training, assets, effort)
     await ctx.send(output)
-    
+
+# Roll xdx
 @bot.command(
-    name="profile",
-    description="View character sheet",
-    scope=guild_id,
+    name="dice",
+    description="Roll xdx",
+    options = [
+        interactions.Option(
+            name="number",
+            description="Number of dice",
+            type=interactions.OptionType.INTEGER,
+            required=True,
+        ),
+        interactions.Option(
+            name="sides",
+            description="Number of sides",
+            type=interactions.OptionType.INTEGER,
+            required=True,
+        ),
+    ],
+)
+async def dice(ctx: interactions.CommandContext, number: int, sides: int):
+    output = cypher.roll(number, sides)
+    await ctx.send(output)
+
+# Roll a random cypher from dataframe
+@bot.command(
+    name="cypher",
+    description="Rolls a random tropey cypher",
+)
+async def roll_cypher(ctx: interactions.CommandContext):
+    output = cypher.print_cypher()
+    await ctx.send(output)
+
+# Look up a specific Cypher ability
+# This is currently case-sensitive (and spelling sensitive)
+@bot.command(
+    name="ability",
+    description="Ability lookup",
+    options = [
+        interactions.Option(
+            name="text",
+            description="What ability?",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def ability(ctx: interactions.CommandContext, text: str):
+    output = cypher.print_ability(text)
+    await ctx.send(output)
+
+# Look at a specific character sheet
+# Sometimes we don't want the full sheet,
+# so this first one is just for stat pools.
+@bot.command(
+    name="status",
+    description="View character status",
     options = [
         interactions.Option(
             name="character",
@@ -84,97 +110,40 @@ async def roll(ctx: interactions.CommandContext, difficulty: int = 0, training: 
         ),
     ],
 )
-async def profile(ctx: interactions.CommandContext, character: str):
-    output = character_sheet.profile(character)
+async def status(ctx: interactions.CommandContext, character: str):
+    output = cypher.profile(character)
     await ctx.send(output)
-    
+
+# Sometimes, we DO want the full character sheet!
 @bot.command(
-    name="setup",
-    description="Create a new character",
-    scope=guild_id,
+    name="sheet",
+    description="View full character sheet",
     options = [
         interactions.Option(
-            name="name",
-            description="Short name (for lookups)",
+            name="character",
+            description="What character?",
             type=interactions.OptionType.STRING,
             required=True,
-        ),
-        interactions.Option(
-            name="full_name",
-            description="Full name",
-            type=interactions.OptionType.STRING,
-            required=True,
-        ),
-        interactions.Option(
-            name="descriptor",
-            description="Descriptor",
-            type=interactions.OptionType.STRING,
-            required=True,
-        ),
-        interactions.Option(
-            name="ctype",
-            description="Type",
-            type=interactions.OptionType.STRING,
-            required=True,
-        ),
-        interactions.Option(
-            name="focus",
-            description="Focus",
-            type=interactions.OptionType.STRING,
-            required=True,
-        ),
-        interactions.Option(
-            name="flavor",
-            description="Flavor",
-            type=interactions.OptionType.STRING,
-            required=False,
-        ),
-        interactions.Option(
-            name="might",
-            description="Might Pool",
-            type=interactions.OptionType.INTEGER,
-            required=False,
-        ),
-        interactions.Option(
-            name="speed",
-            description="Speed Pool",
-            type=interactions.OptionType.INTEGER,
-            required=False,
-        ),
-        interactions.Option(
-            name="intellect",
-            description="Intellect Pool",
-            type=interactions.OptionType.INTEGER,
-            required=False,
-        ),
-        interactions.Option(
-            name="might_edge",
-            description="Might Edge",
-            type=interactions.OptionType.INTEGER,
-            required=False,
-        ),
-        interactions.Option(
-            name="speed_edge",
-            description="Speed Edge",
-            type=interactions.OptionType.INTEGER,
-            required=False,
-        ),
-        interactions.Option(
-            name="intellect_edge",
-            description="Intellect Edge",
-            type=interactions.OptionType.INTEGER,
-            required=False,
         ),
     ],
 )
-async def setup(ctx: interactions.CommandContext, name: str, full_name: str, descriptor: str, ctype: str, focus: str, flavor:str = "", might: int=8, speed: int=8, intellect: int=8, might_edge:int=0, speed_edge:int=0, intellect_edge:int=0):
-    output = character_sheet.setup_character(name=name, full_name=full_name, desc=descriptor, ctype=ctype, focus=focus, flavor = flavor, m = might, s = speed, i = intellect, m_e = might_edge, s_e = speed_edge, i_e = intellect_edge)
-    await ctx.send(output)
-    
+async def sheet(ctx: interactions.CommandContext, character: str):
+    await Paginator(
+        client=bot,
+        ctx=ctx,
+        pages=[
+            Page(cypher.profile(character), title="Stats"),
+            Page(cypher.skills(character), title="Skills"),
+            Page(cypher.abilities(character), title="Abilities"),
+            Page(cypher.equipment(character), title="Equipment"),
+        ],
+        author_only=True,
+    ).run()
+
+# Spend points
 @bot.command(
     name="spend",
     description="Spend from pools",
-    scope=guild_id,
     options = [
         interactions.Option(
             name="character",
@@ -209,13 +178,13 @@ async def setup(ctx: interactions.CommandContext, name: str, full_name: str, des
     ],
 )
 async def spend(ctx: interactions.CommandContext, character: str, might: int=0, speed: int=0, intellect: int=0, xp: int=0):
-    output = character_sheet.spend(name=character, might=might, speed=speed, intel=intellect, xp=xp)
+    output = cypher.spend(name=character, might=might, speed=speed, intel=intellect, xp=xp)
     await ctx.send(output)
-    
+
+# Recover points
 @bot.command(
     name="recover",
     description="Recover lost points",
-    scope=guild_id,
     options = [
         interactions.Option(
             name="character",
@@ -244,13 +213,13 @@ async def spend(ctx: interactions.CommandContext, character: str, might: int=0, 
     ],
 )
 async def recover(ctx: interactions.CommandContext, character: str, might: int=0, speed: int=0, intellect: int=0):
-    output = character_sheet.recover(name=character, might=might, speed=speed, intel=intellect)
+    output = cypher.recover(name=character, might=might, speed=speed, intel=intellect)
     await ctx.send(output)
-    
+
+# Award XP
 @bot.command(
     name="xp",
-    description="Add XP!",
-    scope=guild_id,
+    description="Award XP",
     options = [
         interactions.Option(
             name="character",
@@ -267,13 +236,13 @@ async def recover(ctx: interactions.CommandContext, character: str, might: int=0
     ],
 )
 async def xp(ctx: interactions.CommandContext, character: str, amount: int):
-    output = character_sheet.add_xp(name=character, amount=amount)
+    output = cypher.add_xp(name=character, amount=amount)
     await ctx.send(output)
 
+# Advance
 @bot.command(
     name="advance",
     description="Spend XP on advancement",
-    scope=guild_id,
     options = [
         interactions.Option(
             name="character",
@@ -307,80 +276,20 @@ async def xp(ctx: interactions.CommandContext, character: str, amount: int):
         ),
         interactions.Option(
             name="other",
-            description="If advancing skill, this isn't being tracked yet. Type whatever, just don't leave it blank.",
+            description="If taking another advancement option from the rulebook, this isn't being tracked yet. Type whatever, just don't leave it blank.",
             type=interactions.OptionType.STRING,
             required=False,
         ),
     ],
 )
-async def recover(ctx: interactions.CommandContext, character: str, pools: str=None, effort: str=None, edge: str=None, skill: str=None, other: str=None):
-    output = character_sheet.advance(name=character, pools=pools, effort=effort, edge=edge, skill=skill, other=other)
+async def advance(ctx: interactions.CommandContext, character: str, pools: str=None, effort: str=None, edge: str=None, skill: str=None, other: str=None):
+    output = cypher.advance(name=character, pools=pools, effort=effort, edge=edge, skill=skill, other=other)
     await ctx.send(output)
-    
 
-@bot.command(
-    name="sheet",
-    description="Improved character sheet",
-    scope=guild_id,
-    options = [
-        interactions.Option(
-            name="character",
-            description="What character?",
-            type=interactions.OptionType.STRING,
-            required=True,
-        ),
-    ],
-)
-async def sheet(ctx: interactions.CommandContext, character: str):
-    await Paginator(
-        client=bot,
-        ctx=ctx,
-        pages=[
-            Page(character_sheet.profile(character), title="Stats"),
-            Page(character_sheet.skills(character), title="Skills"),
-            Page(character_sheet.abilities(character), title="Abilities"),
-            Page(character_sheet.equipment(character), title="Equipment"),
-        ],
-        author_only=True,
-    ).run()
-    
-button = interactions.Button(
-        style=interactions.ButtonStyle.PRIMARY,
-        label = "More!",
-        custom_id="drip_button"
-        )    
-    
-@bot.command(
-    name="drip",
-    description="Drip start!",
-    scope=guild_id,
-)
-async def drip(ctx: interactions.CommandContext):
-    dripfile = 'dripper.txt'
-    with open(dripfile, 'r+', encoding='utf8') as f:
-        firstline = f.readline()
-        data = f.read()
-        f.seek(0)
-        f.write(data)
-        f.truncate()
-    await ctx.send(firstline, components=button)
-    
-@bot.component("drip_button")
-async def drip_button_response(ctx):
-    await ctx.edit(components=None)
-    dripfile = 'dripper.txt'
-    with open(dripfile, 'r+', encoding='utf8') as f:
-        firstline = f.readline()
-        data = f.read()
-        f.seek(0)
-        f.write(data)
-        f.truncate()
-    await ctx.send(firstline, components=button)
-
+# Rest
 @bot.command(
     name="rest",
     description="Rest up",
-    scope=guild_id,
     options = [
         interactions.Option(
             name="character",
@@ -393,8 +302,117 @@ async def drip_button_response(ctx):
 async def rest(ctx: interactions.CommandContext, character: str):
     output = character_sheet.rest(name=character)
     await ctx.send(output)
-            
+
+# Set up a new character sheet
+# I want to use a FORM for this. That would be cool!
+
+# Edit character sheet
+
+
+
+
+
+
+
+
+
+
+# Message Dripper, FIFO, from txt file
+# The "dripper" is started with a slash command,
+# then spawns a button that can be pressed to continue
+button = interactions.Button(
+        style=interactions.ButtonStyle.PRIMARY,
+        label = "More!",
+        custom_id="drip_button"
+        )    
     
+@bot.command(
+    name="drip",
+    description="Drip start!",
+)
+async def drip(ctx: interactions.CommandContext):
+    dripfile = 'Assets/dripper.txt'
+    with open(dripfile, 'r+', encoding='utf8') as f:
+        firstline = f.readline()
+        data = f.read()
+        f.seek(0)
+        f.write(data)
+        f.truncate()
+    await ctx.send(firstline, components=button)
     
-    
+@bot.component("drip_button")
+async def drip_button_response(ctx):
+    await ctx.edit(components=None)
+    dripfile = 'Assets/dripper.txt'
+    with open(dripfile, 'r+', encoding='utf8') as f:
+        firstline = f.readline()
+        data = f.read()
+        f.seek(0)
+        f.write(data)
+        f.truncate()
+    await ctx.send(firstline, components=button)
+
+# NLTK n-gram fake plot creator
+@bot.command(
+    name="plot",
+    description="Generate random plotting things!",
+    options = [
+        interactions.Option(
+            name="feeder",
+            description="1 or 2 words to get it started (optional)",
+            type=interactions.OptionType.STRING,
+            required=False,
+        ),
+        interactions.Option(
+            name="exclusions",
+            description="What words would you like to exclude? (optional)",
+            type=interactions.OptionType.STRING,
+            required=False,
+        ),
+    ],
+)
+async def plot(ctx: interactions.CommandContext, feeder: str = None, exclusions: str = None):
+    output = fun.two_seed_generator(feeder, exclusions)
+    await ctx.send(output)
+
+# Mad libs style string filler
+@bot.command(
+    name="filler",
+    description="Fills instances of verb, noun, person, place, adj, adv, color, and emotion, mad lib style.",
+    options = [
+        interactions.Option(
+            name="text",
+            description="Full text to fill",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def filler(ctx: interactions.CommandContext, text: str):
+    output = fun.filler(text)
+    await ctx.send(output)
+
+# Make the bot make the choices
+bot.command(
+    name="choose",
+    description="Forces the bot to make the hard decisions... or any decision at all. Use | to separate choices",
+    options = [
+        interactions.Option(
+            name="text",
+            description="All choices, separated by |",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def choose(ctx: interactions.CommandContext, text: str):
+    options = text.split("|")
+    choice = random.choice(options)
+    await ctx.send(choice)
+
+
+
+
+
+
 bot.start()

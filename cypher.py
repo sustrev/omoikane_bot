@@ -4,6 +4,7 @@ import ast
 
 cypher_df = pd.read_csv('Cypher/Cyphers.csv')
 abilities_df = pd.read_excel('Cypher/All_Abilities.xlsx')
+character_sheet_path = 'Cypher/Character_Sheets.xlsx'
 
 # For rolling a d20 with Cypher formatting
 def print_roll(difficulty, training, assets, effort):
@@ -173,13 +174,13 @@ Cost: {} {}
     return output
 
 def list_ability():
-    abilities_df = pd.read_excel('All_Abilities.xlsx')
+    abilities_df = pd.read_excel(character_sheet_path)
     ability_list = abilities_df['Ability'].tolist()
     return ability_list
 
 # For Cypher character sheet lookups
 def profile(name):
-    character_df = pd.read_excel('Characters.xlsx')
+    character_df = pd.read_excel(character_sheet_path)
     # Pretty-prints character profile
     full = character_df.loc[character_df['name'] == name, 'Full_Name'].item()
     desc = character_df.loc[character_df['name'] == name, 'Descriptor'].item()
@@ -212,7 +213,7 @@ Condition: {}""".format(full, desc, ctype, focus, flav, tier, effort, xp, m_c, m
     return output
 
 def condition_lookup(name):
-    character_df = pd.read_excel('Characters.xlsx')
+    character_df = pd.read_excel(character_sheet_path)
     m_c = character_df.loc[character_df['name'] == name, 'Might_C'].item()
     s_c = character_df.loc[character_df['name'] == name, 'Speed_C'].item()
     i_c = character_df.loc[character_df['name'] == name, 'Int_C'].item()
@@ -240,7 +241,7 @@ def condition_lookup(name):
     return condition
 
 def skills(name):
-    character_skills = pd.read_excel('Character_Skills.xlsx')
+    character_skills = pd.read_excel(character_sheet_path)
     # Pretty-prints skills
     full = character_skills.loc[character_skills['name'] == name, 'Full_Name'].item()
     train = character_skills.loc[character_skills['name'] == name, 'Trained'].item()
@@ -255,7 +256,7 @@ Inability      | {}""".format(full, train, spec, inab)
     return output
 
 def abilities(name):
-    character_ab = pd.read_excel('Character_Abilities.xlsx')
+    character_ab = pd.read_excel(character_sheet_path)
     # Pretty-prints abilities
     full = character_ab.loc[character_ab['name'] == name, 'Full_Name'].item()
     abilities = character_ab.loc[character_ab['name'] == name, 'Abilities'].item()
@@ -266,7 +267,7 @@ def abilities(name):
     return output
 
 def equipment(name):
-    character_eq = pd.read_excel('Character_Inventory.xlsx')
+    character_eq = pd.read_excel(character_sheet_path)
     # Pretty-prints equpiment
     full = character_eq.loc[character_eq['name'] == name, 'Full_Name'].item()
     cypher = character_eq.loc[character_eq['name'] == name, 'Cypher'].item()
@@ -281,7 +282,7 @@ Equipment  | {}""".format(full, cypher, equip)
 
 # For spending points
 def spend(name, might=0, speed=0, intel=0, xp=0):
-    character_df = pd.read_excel('Characters.xlsx')
+    character_df = pd.read_excel(character_sheet_path)
     m_c = character_df.loc[character_df['name'] == name, 'Might_C'].item()
     s_c = character_df.loc[character_df['name'] == name, 'Speed_C'].item()
     i_c = character_df.loc[character_df['name'] == name, 'Int_C'].item()
@@ -301,13 +302,13 @@ def spend(name, might=0, speed=0, intel=0, xp=0):
         character_df.loc[character_df['name'] == name, 'Speed_C'] = new_sc
         character_df.loc[character_df['name'] == name, 'Int_C'] = new_ic
         character_df.loc[character_df['name'] == name, 'XP'] = new_xp
-        character_df.to_excel('Characters.xlsx', index=False)
+        character_df.to_excel(character_sheet_path, index=False)
         output = "Character updated accordingly."
         return output
 
 # For recovering points
 def recover(name, might=0, speed=0, intel=0):
-    character_df = pd.read_excel('Characters.xlsx')
+    character_df = pd.read_excel(character_sheet_path)
     m_c = character_df.loc[character_df['name'] == name, 'Might_C'].item()
     s_c = character_df.loc[character_df['name'] == name, 'Speed_C'].item()
     i_c = character_df.loc[character_df['name'] == name, 'Int_C'].item()
@@ -328,23 +329,23 @@ def recover(name, might=0, speed=0, intel=0):
         character_df.loc[character_df['name'] == name, 'Might_C'] = new_mc
         character_df.loc[character_df['name'] == name, 'Speed_C'] = new_sc
         character_df.loc[character_df['name'] == name, 'Int_C'] = new_ic
-        character_df.to_excel('Characters.xlsx', index=False)
+        character_df.to_excel(character_sheet_path, index=False)
         output = "Character updated accordingly."
         return output
 
 # For gaining XP
 def add_xp(name, amount):
-    character_df = pd.read_excel('Characters.xlsx')
+    character_df = pd.read_excel(character_sheet_path)
     xp_c = character_df.loc[character_df['name'] == name, 'XP'].item()
     new_xp = xp_c + amount
     character_df.loc[character_df['name'] == name, 'XP'] = new_xp
-    character_df.to_excel('Characters.xlsx', index=False)
+    character_df.to_excel(character_sheet_path, index=False)
     output = "XP awarded!"
     return output
 
 # For using XP to advance
 def advance(name, pools=None, effort=None, edge=None, skill=None, other=None):
-    character_df = pd.read_excel('Characters.xlsx')
+    character_df = pd.read_excel(character_sheet_path)
     
     tier = character_df.loc[character_df['name'] == name, 'Tier'].item()
     effort_c = character_df.loc[character_df['name'] == name, 'Effort'].item()
@@ -466,7 +467,7 @@ def advance(name, pools=None, effort=None, edge=None, skill=None, other=None):
     else:
         val=True
     
-    character_df.to_excel('Characters.xlsx', index=False)
+    character_df.to_excel(character_sheet_path, index=False)
     
     output = "Advancement complete!"
     return output
@@ -487,7 +488,7 @@ def pool_parser(adv_string):
 
 # For resting
 def rest(name):
-    character_df = pd.read_excel('Characters.xlsx')
+    character_df = pd.read_excel(character_sheet_path)
     tier = character_df.loc[character_df['name'] == name, 'Tier'].item()
     roll = random.randint(1,6)
     rest_amt = roll + tier
@@ -500,7 +501,7 @@ Please use `/recover` next to divide these points among your stat pools.
 {}""".format(rest_type, rest_amt, rest_msg)
     
     character_df.loc[character_df['name'] == name, 'Rest'] = rest_cycle(rest_type)
-    character_df.to_excel('Characters.xlsx', index=False)
+    character_df.to_excel(character_sheet_path, index=False)
     
     return output
 
@@ -518,13 +519,44 @@ def rest_cycle(current):
     return next_rest
 
 # For Cypher character sheet setup
-# Need to repair this (want all info in one xlsx instead of divided)
-# Need to also create add/rem functions for the other pages
-def setup_character(name, full_name, desc, ctype, focus, flavor = "", m = 8, s = 8, i = 8, m_e = 0, s_e = 0, i_e = 0):
-    character_df = pd.read_excel('Characters.xlsx')
-    d = {'name':[name], 'Full_Name':[full_name], 'Descriptor':[desc], 'Type':[ctype], 'Focus':[focus], 'Flavor':[flavor], 'Tier':[1], 'Effort':[1], 'XP':[0], 'Might_C':[m], 'Might_P':[m], 'Might_E':[m_e], 'Speed_C':[s], 'Speed_P':[s], 'Speed_E':[s_e], 'Int_C':[i], 'Int_P':[i], 'Int_E':[i_e], 'Advancement':[[]]}
+def setup_character(name, full_name, desc, ctype, focus, flavor = "", m = 8, s = 8, i = 8, m_e = 0, s_e = 0, i_e = 0, train = 'None', spec = 'None', inability = 'None', ability_list = 'None', cypher = 'None', equip = 'None'):
+    character_df = pd.read_excel(character_sheet_path)
+    d = {'name':[name], 
+        'Full_Name':[full_name], 
+        'Descriptor':[desc], 
+        'Type':[ctype], 
+        'Focus':[focus], 
+        'Flavor':[flavor], 
+        'Tier':[1], 
+        'Effort':[1], 
+        'XP':[0], 
+        'Might_C':[m], 
+        'Might_P':[m], 
+        'Might_E':[m_e], 
+        'Speed_C':[s], 
+        'Speed_P':[s], 
+        'Speed_E':[s_e], 
+        'Int_C':[i], 
+        'Int_P':[i], 
+        'Int_E':[i_e], 
+        'Advancement':[[]],
+        'Rest': ['1 Action'],
+        'Trained': [train],
+        'Specialized': [spec],
+        'Inability': [inability],
+        'Abilities': [ability_list],
+        'Cypher': [cypher],
+        'Equipment': [equip]}
     char_df = pd.DataFrame.from_dict(data=d)
     new_character_df = character_df.append(char_df, ignore_index=True)
-    new_character_df.to_excel('Characters.xlsx', index=False)
+    new_character_df.to_excel(character_sheet_path, index=False)
     return("New character added!")
+
+    # Edit character sheet
+    # Add Trained
+    # Move Trained to Specialized
+    # Negate Inability
+    # Maintain ability_list
+    # Maintain cypher
+    # Maintain equipment
 
