@@ -5,6 +5,7 @@ Discord bot to implement Monte Cook's Cypher TTRPG as well as a few other fun, e
 To comply with Discord's bot interaction best practices, all bot functions are called via slash command and/or button integration. The following commands are available:
 * /ability is a lookup utility for all abilities in the Cypher core rulebook. Please note that this is case-sensitive and spelling counts. The one exception is the ability "Blessings of the Gods" because the ability description is too verbose for Discord. 
 * /advance manages the four advancements per tier. It keeps track of which type of advancement was taken, doesn't allow duplicates, and appropriately subtracts XP from a player's total. Once four advancements have been taken, advances tier level.
+* /choose takes a string input with choices separated by `|` ("one|two|five") and returns one of the choices at random, for coin flips and other decision-making moments left up to chance.
 * /cypher rolls a random cypher and level from a list of cyphers; the file `Cypher/Cyphers.csv` is what this is set to pull from. Currently, I'm using custom-made cinematic-flavored cyphers with ideas pulled from a selection of cypher cards from Metal Weave Games' "Subtle Cyphers Based on TV Tropes" with additional influence from tvtropes.com.
 * /dice rolls xdx dice and provides a single numerical value. It does not break down full dice results, but it *does* add a bit of text when a "1" is rolled.
 * /drip begins a first in-first out feed of the file `Assets/dripper.txt`, and then generates a "More!" button to iterate through the file line-by-line. I use this to "drip" world lore throughout the week to assist with engagement in the game server. Currently, this file includes text from a currently-running game.
@@ -19,6 +20,8 @@ To comply with Discord's bot interaction best practices, all bot functions are c
 * /spend allows players to track points (might, speed, intellect, and XP) for ability and effort use, re-rolls, and taking damage.
 * /status pulls up just the first page of the character sheet for current stats without the additional navigation to other pages, for quick reference.
 * /xp awards XP! 
+
+
 
 ## Requirements
 This bot repository leans heavily on Python, Pandas, and local files. The following libraries must be installed for the bot to run properly:
