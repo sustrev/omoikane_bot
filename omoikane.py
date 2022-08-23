@@ -136,6 +136,7 @@ async def sheet(ctx: interactions.CommandContext, character: str):
             Page(cypher.skills(character), title="Skills"),
             Page(cypher.abilities(character), title="Abilities"),
             Page(cypher.equipment(character), title="Equipment"),
+            Page(cypher.notes(character), title="Notes"),
         ],
         author_only=True,
     ).run()
