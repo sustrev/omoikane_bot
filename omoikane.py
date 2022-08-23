@@ -300,14 +300,56 @@ async def advance(ctx: interactions.CommandContext, character: str, pools: str=N
     ],
 )
 async def rest(ctx: interactions.CommandContext, character: str):
-    output = character_sheet.rest(name=character)
+    output = cypher.rest(name=character)
     await ctx.send(output)
 
 # Set up a new character sheet
 # I want to use a FORM for this. That would be cool!
 
 # Edit character sheet
+@bot.command(
+    name="edit_inventory",
+    options = [
+        interactions.Option(
+            name="character",
+            description="What character?",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def edit_inventory(ctx: interactions.CommandContext, character: str):
+    current_cypher = cypher.cypher_lookup(character)
+    current_equipment = cypher.equip_lookup(character)
+    name_component = interactions.TextInput(
+        style = interactions.TextStyleType.SHORT,
+        label = "Name: (Don't change this!)"
+        custom_id = 'character'
+        placeholder = character
+    )
+    cypher_component = interactions.TextInput(
+        style = interactions.TextStyleType.PARAGRAPH,
+        label = "What cyphers are you currently holding?",
+        custom_id = 'cypher_update',
+        placeholder= current_cypher
+    )
+    equip_component = interactions.TextInput(
+        style = interactions.TextStyleType.PARAGRAPH,
+        label = "What equipment do you have?",
+        custom_id = 'equip_update',
+        placeholder = current_equipment
+    )
+    modal = interactions.Modal(
+        title="Edit Inventory",
+        custom_id = "edit_inventory",
+        components = [name_component, cypher_component, equip_component],
+    )
+    await ctx.popup(modal)
 
+@bot.modal("edit_inventory")
+async def modal_response_inventory(ctx, character: str, cypher_update: str, equip_update: str):
+    output = cypher.inventory_update(character, cypher_update, equip_update)
+    await ctx.send(output)
 
 
 

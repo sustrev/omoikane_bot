@@ -557,6 +557,22 @@ def setup_character(name, full_name, desc, ctype, focus, flavor = "", m = 8, s =
     # Move Trained to Specialized
     # Negate Inability
     # Maintain ability_list
-    # Maintain cypher
-    # Maintain equipment
+
+    # Maintain inventory
+def cypher_lookup(name):
+    character_df = pd.read_excel(character_sheet_path)
+    cypher = character_df.loc[character_df['name'] == name, 'Cypher'].item()
+    return(cypher)
+
+def equip_lookup(name):
+    character_df = pd.read_excel(character_sheet_path)
+    equip = character_df.loc[character_df['name'] == name, 'Equipment'].item()
+    return(equip)
+
+def inventory_update(name, cypher, equip):
+    character_df = pd.read_excel(character_sheet_path)
+    character_df.loc[character_df['name'] == name, 'Cypher'] = cypher
+    character_df.loc[character_df['name'] == name, 'Equipment'] = equip
+    character_df.to_excel(character_sheet_path, index=False)
+    return("Inventory updated!")
 
