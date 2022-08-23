@@ -26,6 +26,7 @@ To comply with Discord's bot interaction best practices, all bot functions are c
 This bot leans heavily on Python, Pandas, and local files. The following libraries must also be installed for the bot to run properly:
 * interactions-py, found at https://github.com/interactions-py/library
 * paginator, an extension of interactions-py, https://github.com/interactions-py/paginator
+
 You will also need a Discord bot token; many tutorials are available regarding initial Discord bot setup.
 
 ## How to Run
