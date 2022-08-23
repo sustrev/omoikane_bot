@@ -309,6 +309,7 @@ async def rest(ctx: interactions.CommandContext, character: str):
 # Edit character sheet
 @bot.command(
     name="edit_inventory",
+    description="Edit your inventory page on your character sheet",
     options = [
         interactions.Option(
             name="character",
@@ -323,21 +324,21 @@ async def edit_inventory(ctx: interactions.CommandContext, character: str):
     current_equipment = cypher.equip_lookup(character)
     name_component = interactions.TextInput(
         style = interactions.TextStyleType.SHORT,
-        label = "Name: (Don't change this!)"
-        custom_id = 'character'
-        placeholder = character
+        label = "Name: (Don't change this!)",
+        custom_id = 'character',
+        placeholder = character,
     )
     cypher_component = interactions.TextInput(
         style = interactions.TextStyleType.PARAGRAPH,
         label = "What cyphers are you currently holding?",
         custom_id = 'cypher_update',
-        placeholder= current_cypher
+        placeholder= current_cypher,
     )
     equip_component = interactions.TextInput(
         style = interactions.TextStyleType.PARAGRAPH,
         label = "What equipment do you have?",
         custom_id = 'equip_update',
-        placeholder = current_equipment
+        placeholder = current_equipment,
     )
     modal = interactions.Modal(
         title="Edit Inventory",
