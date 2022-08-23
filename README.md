@@ -22,13 +22,14 @@ To comply with Discord's bot interaction best practices, all bot functions are c
 * /xp awards XP! 
 
 
-
 ## Requirements
-This bot repository leans heavily on Python, Pandas, and local files. The following libraries must be installed for the bot to run properly:
-* Insert stuff here!
+This bot leans heavily on Python, Pandas, and local files. The following libraries must also be installed for the bot to run properly:
+* interactions-py, found at https://github.com/interactions-py/library
+* paginator, an extension of interactions-py, https://github.com/interactions-py/paginator
+You will also need a Discord bot token; many tutorials are available regarding initial Discord bot setup.
 
 ## How to Run
-Talk about saving it yourself, setting things up, making a Discord bot, adding the token, etc
+After cloning this repository for yourself, you will need to additionally add a secrets.py to link your bot token (You *can* also hard-code your token in, but at your own risk. Protect your token!). I also suggest running this bot in a virtual environment so you can best manage library versions. Then, point your terminal to omoikane.py! Feel free to edit any files to fit your own purpose, from deleting the placeholder NPCs on the character spreadsheet to implementing your own lore/text for NLTK/dripper/etc. You are likewise free to use this code in whole or in part for your own personal projects.
 
 ## Credits
 Much of this bot is created specifically for Monte Cook's Cypher system. This bot is meant to take the place of a basic VTT environment, so that games can be played solely on Discord. This bot is *not* meant to take place of supporting Monte Cook by purchasing a copy of the playbook. Therefore, I have purposely avoided providing features that would negate the necessity of the book during character creation and leveling up. Please visit [Monte Cook Games](https://www.montecookgames.com/store/product/cypher-system-rulebook-2/) to purchase your own copy, if you haven't already; it's integral to understanding the game utility features this bot provides. This bot is in no way affiliated with Monte Cook, this is just a profit-free passion project.
