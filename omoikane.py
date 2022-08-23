@@ -1,7 +1,6 @@
 import interactions
 from interactions.ext.paginator import Page, Paginator
 import random
-import asyncio
 
 import cypher
 import fun
