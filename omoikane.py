@@ -307,6 +307,99 @@ async def rest(ctx: interactions.CommandContext, character: str):
 # I want to use a FORM for this. That would be cool!
 
 # Edit character sheet
+# Edit Skills
+@bot.command(
+    name="edit_skills",
+    description="Edit your skills page on your character sheet",
+    options = [
+        interactions.Option(
+            name="character",
+            description="What character?",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def edit_skills(ctx: interactions.CommandContext, character: str):
+    current_trained = cypher.trained_lookup(character)
+    current_spec = cypher.spec_lookup(character)
+    current_inability = cypher.inability_lookup(character)
+    name_component = interactions.TextInput(
+        style = interactions.TextStyleType.SHORT,
+        label = "Name: (Don't change this!)",
+        custom_id = 'character',
+        value = character,
+    )
+    trained_component = interactions.TextInput(
+        style = interactions.TextStyleType.PARAGRAPH,
+        label = "Trained:",
+        custom_id = 'trained_update',
+        value = current_trained,
+    )
+    spec_component = interactions.TextInput(
+        style = interactions.TextStyleType.PARAGRAPH,
+        label = "Specialized:",
+        custom_id = 'spec_update',
+        value = current_spec,
+    )
+    inability_component = interactions.TextInput(
+        style = interactions.TextStyleType.PARAGRAPH,
+        label = "Inability:",
+        custom_id = 'inability_update',
+        value = current_inability,
+    )
+    modal = interactions.Modal(
+        title="Edit Skills",
+        custom_id = "edit_skills",
+        components = [name_component, trained_component, spec_component, inability_component],
+    )
+    await ctx.popup(modal)
+
+@bot.modal("edit_skills")
+async def modal_response_skills(ctx, character: str, trained_update: str, spec_update: str, inability_update: str):
+    output = cypher.skills_update(character, trained_update, spec_update, inability_update)
+    await ctx.send(output)
+
+# Edit Abilities
+@bot.command(
+    name="edit_abilities",
+    description="Edit your abilities page on your character sheet",
+    options = [
+        interactions.Option(
+            name="character",
+            description="What character?",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def edit_abilities(ctx: interactions.CommandContext, character: str):
+    current_abilities = cypher.ability_lookup(character)
+    name_component = interactions.TextInput(
+        style = interactions.TextStyleType.SHORT,
+        label = "Name: (Don't change this!)",
+        custom_id = 'character',
+        value = character,
+    )
+    abilities_component = interactions.TextInput(
+        style = interactions.TextStyleType.PARAGRAPH,
+        label = "Abilities:",
+        custom_id = 'abilities_update',
+        value = current_abilities,
+    )
+    modal = interactions.Modal(
+        title="Edit Abilities",
+        custom_id = "edit_abilities",
+        components = [name_component, abilities_component],
+    )
+    await ctx.popup(modal)
+
+@bot.modal("edit_abilities")
+async def modal_response_abilities(ctx, character: str, abilities_update: str):
+    output = cypher.ability_update(character, abilities_update)
+    await ctx.send(output)
+
+# Edit inventory
 @bot.command(
     name="edit_inventory",
     description="Edit your inventory page on your character sheet",
@@ -326,19 +419,19 @@ async def edit_inventory(ctx: interactions.CommandContext, character: str):
         style = interactions.TextStyleType.SHORT,
         label = "Name: (Don't change this!)",
         custom_id = 'character',
-        placeholder = character,
+        value = character,
     )
     cypher_component = interactions.TextInput(
         style = interactions.TextStyleType.PARAGRAPH,
-        label = "What cyphers are you currently holding?",
+        label = "Cyphers:",
         custom_id = 'cypher_update',
-        placeholder= current_cypher,
+        value = current_cypher,
     )
     equip_component = interactions.TextInput(
         style = interactions.TextStyleType.PARAGRAPH,
-        label = "What equipment do you have?",
+        label = "Equipment:",
         custom_id = 'equip_update',
-        placeholder = current_equipment,
+        value = current_equipment,
     )
     modal = interactions.Modal(
         title="Edit Inventory",
@@ -352,12 +445,44 @@ async def modal_response_inventory(ctx, character: str, cypher_update: str, equi
     output = cypher.inventory_update(character, cypher_update, equip_update)
     await ctx.send(output)
 
+# Edit notes page
+@bot.command(
+    name="edit_notes",
+    description="Edit your notes page on your character sheet",
+    options = [
+        interactions.Option(
+            name="character",
+            description="What character?",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def edit_notes(ctx: interactions.CommandContext, character: str):
+    current_notes = cypher.notes_lookup(character)
+    name_component = interactions.TextInput(
+        style = interactions.TextStyleType.SHORT,
+        label = "Name: (Don't change this!)",
+        custom_id = 'character',
+        value = character,
+    )
+    notes_component = interactions.TextInput(
+        style = interactions.TextStyleType.PARAGRAPH,
+        label = "Notes:",
+        custom_id = 'notes_update',
+        value = current_notes,
+    )
+    modal = interactions.Modal(
+        title="Edit Notes",
+        custom_id = "edit_notes",
+        components = [name_component, notes_component],
+    )
+    await ctx.popup(modal)
 
-
-
-
-
-
+@bot.modal("edit_notes")
+async def modal_response_notes(ctx, character: str, notes_update: str):
+    output = cypher.ability_update(character, notes_update)
+    await ctx.send(output)
 
 
 # Message Dripper, FIFO, from txt file

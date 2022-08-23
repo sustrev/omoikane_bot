@@ -279,6 +279,17 @@ Equipment  | {}""".format(full, cypher, equip)
     
     return output
 
+def notes(name):
+    character_df = pd.read_excel(character_sheet_path)
+    # Pretty-prints equpiment
+    full = character_df.loc[character_df['name'] == name, 'Full_Name'].item()
+    notes = character_df.loc[character_df['name'] == name, 'Notes'].item()
+    
+    output = """>>> __**{}**__
+{}""".format(full, notes)
+    
+    return output
+
 
 # For spending points
 def spend(name, might=0, speed=0, intel=0, xp=0):
@@ -552,13 +563,45 @@ def setup_character(name, full_name, desc, ctype, focus, flavor = "", m = 8, s =
     new_character_df.to_excel(character_sheet_path, index=False)
     return("New character added!")
 
-    # Edit character sheet
-    # Add Trained
-    # Move Trained to Specialized
-    # Negate Inability
-    # Maintain ability_list
+# Edit character sheet
 
-    # Maintain inventory
+# Maintain skills
+def trained_lookup(name):
+    character_df = pd.read_excel(character_sheet_path)
+    trained = character_df.loc[character_df['name'] == name, 'Trained'].item()
+    return(trained)
+
+def spec_lookup(name):
+    character_df = pd.read_excel(character_sheet_path)
+    specialized = character_df.loc[character_df['name'] == name, 'Specialized'].item()
+    return(specialized)
+
+def inability_lookup(name):
+    character_df = pd.read_excel(character_sheet_path)
+    inability = character_df.loc[character_df['name'] == name, 'Inability'].item()
+    return(inability)
+
+def skills_update(name, trained, specialized, inability):
+    character_df = pd.read_excel(character_sheet_path)
+    character_df.loc[character_df['name'] == name, 'Trained'] = trained
+    character_df.loc[character_df['name'] == name, 'Specialized'] = specialized
+    character_df.loc[character_df['name'] == name, 'Inability'] = inability
+    character_df.to_excel(character_sheet_path, index=False)
+    return("Skills updated!")
+
+# Maintain ability_list
+def ability_lookup(name):
+    character_df = pd.read_excel(character_sheet_path)
+    abilities = character_df.loc[character_df['name'] == name, 'Abilities'].item()
+    return(abilities)
+
+def ability_update(name, abilities):
+    character_df = pd.read_excel(character_sheet_path)
+    character_df.loc[character_df['name'] == name, 'Abilities'] = abilities
+    character_df.to_excel(character_sheet_path, index=False)
+    return("Abilities updated!")
+
+# Maintain inventory
 def cypher_lookup(name):
     character_df = pd.read_excel(character_sheet_path)
     cypher = character_df.loc[character_df['name'] == name, 'Cypher'].item()
@@ -576,3 +619,14 @@ def inventory_update(name, cypher, equip):
     character_df.to_excel(character_sheet_path, index=False)
     return("Inventory updated!")
 
+# Maintain notes
+def notes_lookup(name):
+    character_df = pd.read_excel(character_sheet_path)
+    notes = character_df.loc[character_df['name'] == name, 'Notes'].item()
+    return(notes)
+
+def notes_update(name, notes):
+    character_df = pd.read_excel(character_sheet_path)
+    character_df.loc[character_df['name'] == name, 'Notes'] = notes
+    character_df.to_excel(character_sheet_path, index=False)
+    return("Notes updated!")
