@@ -309,8 +309,8 @@ async def rest(ctx: interactions.CommandContext, character: str):
     description="Create a new character",
     options = [
         interactions.Option(
-            name="name",
-            description="Short name (for lookups)",
+            name="lookup_name",
+            description="Short name (used for lookups)",
             type=interactions.OptionType.STRING,
             required=True,
         ),
@@ -382,8 +382,8 @@ async def rest(ctx: interactions.CommandContext, character: str):
         ),
     ],
 )
-async def setup(ctx: interactions.CommandContext, name: str, full_name: str, descriptor: str, ctype: str, focus: str, flavor:str = "", might: int=8, speed: int=8, intellect: int=8, might_edge:int=0, speed_edge:int=0, intellect_edge:int=0):
-    output = cypher.setup_character(name=name, full_name=full_name, desc=descriptor, ctype=ctype, focus=focus, flavor = flavor, m = might, s = speed, i = intellect, m_e = might_edge, s_e = speed_edge, i_e = intellect_edge)
+async def setup(ctx: interactions.CommandContext, lookup_name: str, full_name: str, descriptor: str, ctype: str, focus: str, flavor:str = "", might: int=8, speed: int=8, intellect: int=8, might_edge:int=0, speed_edge:int=0, intellect_edge:int=0):
+    output = cypher.setup_character(name=lookup_name, full_name=full_name, desc=descriptor, ctype=ctype, focus=focus, flavor = flavor, m = might, s = speed, i = intellect, m_e = might_edge, s_e = speed_edge, i_e = intellect_edge)
     await ctx.send(output)
 
 # Edit character sheet

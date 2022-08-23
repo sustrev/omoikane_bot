@@ -530,7 +530,7 @@ def rest_cycle(current):
     return next_rest
 
 # For Cypher character sheet setup
-def setup_character(name, full_name, desc, ctype, focus, flavor = "", m = 8, s = 8, i = 8, m_e = 0, s_e = 0, i_e = 0, train = 'None', spec = 'None', inability = 'None', ability_list = 'None', cypher = 'None', equip = 'None'):
+def setup_character(name, full_name, desc, ctype, focus, flavor = " ", m = 8, s = 8, i = 8, m_e = 0, s_e = 0, i_e = 0):
     character_df = pd.read_excel(character_sheet_path)
     d = {'name':[name], 
         'Full_Name':[full_name], 
@@ -552,12 +552,13 @@ def setup_character(name, full_name, desc, ctype, focus, flavor = "", m = 8, s =
         'Int_E':[i_e], 
         'Advancement':[[]],
         'Rest': ['1 Action'],
-        'Trained': [train],
-        'Specialized': [spec],
-        'Inability': [inability],
-        'Abilities': [ability_list],
-        'Cypher': [cypher],
-        'Equipment': [equip]}
+        'Trained': ['Add skills with edit_skills'],
+        'Specialized': ['None'],
+        'Inability': ['None'],
+        'Abilities': ['Add abilities with edit_abilities'],
+        'Cypher': ['Add inventory with edit_inventory'],
+        'Equipment': ['Add inventory with edit_inventory'],
+        'Notes': ['None yet!']}
     char_df = pd.DataFrame.from_dict(data=d)
     new_character_df = character_df.append(char_df, ignore_index=True)
     new_character_df.to_excel(character_sheet_path, index=False)
