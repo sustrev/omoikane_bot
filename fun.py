@@ -292,7 +292,7 @@ def plot_better(str):
 # For "mad lib" fillers
 def verb():
     verbs=[]
-    with open("verbs_list.txt", "r", encoding="utf8") as f:
+    with open("Assets/verbs_list.txt", "r", encoding="utf8") as f:
         for line in f:
             line = line[:-1]
             verbs.append(line)
@@ -301,7 +301,7 @@ def verb():
 
 def noun():
     noun=[]
-    with open("noun_list.txt", "r", encoding="utf8") as f:
+    with open("Assets/noun_list.txt", "r", encoding="utf8") as f:
         for line in f:
             line = line[:-1]
             noun.append(line)
@@ -310,7 +310,7 @@ def noun():
 
 def person():
     person=[]
-    with open("person_list.txt", "r", encoding="utf8") as f:
+    with open("Assets/person_list.txt", "r", encoding="utf8") as f:
         for line in f:
             line = line[:-1]
             person.append(line)
@@ -319,7 +319,7 @@ def person():
 
 def place():
     place=[]
-    with open("places_list.txt", "r", encoding="utf8") as f:
+    with open("Assets/places_list.txt", "r", encoding="utf8") as f:
         for line in f:
             line = line[:-1]
             place.append(line)
@@ -328,7 +328,7 @@ def place():
 
 def adj():
     adj=[]
-    with open("adj_list.txt", "r", encoding="utf8") as f:
+    with open("Assets/adj_list.txt", "r", encoding="utf8") as f:
         for line in f:
             line = line[:-1]
             adj.append(line)
@@ -337,7 +337,7 @@ def adj():
 
 def adv():
     adv=[]
-    with open("adv_list.txt", "r", encoding="utf8") as f:
+    with open("Assets/adv_list.txt", "r", encoding="utf8") as f:
         for line in f:
             line = line[:-1]
             adv.append(line)
@@ -346,7 +346,7 @@ def adv():
 
 def color():
     color=[]
-    with open("color_list.txt", "r", encoding="utf8") as f:
+    with open("Assets/color_list.txt", "r", encoding="utf8") as f:
         for line in f:
             line = line[:-1]
             color.append(line)
@@ -355,7 +355,7 @@ def color():
 
 def emote():
     emote=[]
-    with open("emote_list.txt", "r", encoding="utf8") as f:
+    with open("Assets/emote_list.txt", "r", encoding="utf8") as f:
         for line in f:
             line = line[:-1]
             emote.append(line)
