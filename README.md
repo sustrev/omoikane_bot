@@ -21,6 +21,7 @@ To comply with Discord's bot interaction best practices, all bot functions are c
 * /status pulls up just the first page of the character sheet for current stats without the additional navigation to other pages, for quick reference.
 * /xp awards XP! 
 
+![Cypher utility demo](https://github.com/sustrev/omoikane_bot/blob/main/Demo/cypher_util_demo.gif?raw=true)
 
 ## Requirements
 This bot leans heavily on Python, Pandas, and local files. The following libraries must also be installed for the bot to run properly:
