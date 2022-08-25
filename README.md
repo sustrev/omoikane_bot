@@ -23,6 +23,10 @@ To comply with Discord's bot interaction best practices, all bot functions are c
 
 ![Cypher utility demo](https://github.com/sustrev/omoikane_bot/blob/main/Demo/cypher_util_demo.gif?raw=true)
 
+This one's just for fun:
+* /plot uses an nltk n-gram implementation to take a .txt file and output new, silly phrases. It is *very* silly.
+![Fun NLTK demo](https://raw.githubusercontent.com/sustrev/omoikane_bot/9f24bef2c243511b84a9197917a3a9091435f36a/Demo/fun_nltk_demo.gif)
+
 ## Requirements
 This bot leans heavily on Python, Pandas, and local files. The following libraries must also be installed for the bot to run properly:
 * interactions-py, found at https://github.com/interactions-py/library
