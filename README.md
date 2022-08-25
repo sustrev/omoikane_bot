@@ -25,6 +25,7 @@ To comply with Discord's bot interaction best practices, all bot functions are c
 
 This one's just for fun:
 * /plot uses an nltk n-gram implementation to take a .txt file and output new, silly phrases. It is *very* silly.
+
 ![Fun NLTK demo](https://raw.githubusercontent.com/sustrev/omoikane_bot/9f24bef2c243511b84a9197917a3a9091435f36a/Demo/fun_nltk_demo.gif)
 
 ## Requirements
