@@ -1,10 +1,12 @@
 import pandas as pd
 import random
 import ast
+import csv
 
 cypher_df = pd.read_csv('Cypher/Cyphers.csv')
 abilities_df = pd.read_excel('Cypher/All_Abilities.xlsx')
 character_sheet_path = 'Cypher/Character_Sheets.xlsx'
+init_sheet = 'Cypher/initiative_tracking_sheet.csv'
 
 # For rolling a d20 with Cypher formatting
 def print_roll(difficulty, training, assets, effort):
@@ -631,3 +633,86 @@ def notes_update(name, notes):
     character_df.loc[character_df['name'] == name, 'Notes'] = notes
     character_df.to_excel(character_sheet_path, index=False)
     return("Notes updated!")
+
+# Initiative Tracker functions
+def track_initiative():
+    with open(init_sheet, 'w') as f:
+        f.write("init_listen,True\n")
+    output = "I am now listening for `/initiative` rolls!"
+    return output
+
+def add_initiative(name, value):
+    with open(init_sheet, 'r') as f:
+        reader = csv.reader(f)
+        rows = [row for row in reader]
+        init_listen = rows[0][1]
+    if init_listen == 'True':
+        with open(init_sheet, 'a') as f:
+            f.write("{},{}\n".format(name,value))
+        output = "Added!"
+    else:
+        output = "I am not currently tracking initiative."
+    return output
+        
+def rm_initiative(name):
+    with open(init_sheet, "r+") as f:
+        reader = csv.reader(f)
+        rows = [row for row in reader if name not in row]
+        clean_rows = [ele for ele in rows if ele != []]
+        f.seek(0)
+        f.truncate()
+        writer = csv.writer(f)
+        writer.writerows(clean_rows)
+    output = "If {} was in there, they aren't now!".format(name)
+    return output
+    
+def sort_initiative():
+    with open(init_sheet, "r+") as f:
+        reader = csv.reader(f)
+        rows = [row for row in reader]
+        sorted_rows = sorted(rows[1:], key=lambda x: int(x[1]), reverse=True)
+        sorted_names = []
+        for name,value in sorted_rows:
+            sorted_names.append(name)
+    return sorted_rows, sorted_names
+    
+def untrack_initiative():
+    with open(init_sheet, 'w') as f:
+        f.write("init_listen,False")
+    output = "No longer tracking initiative."
+    return output
+
+def print_initiative():
+    sorted_rows, sorted_names = sort_initiative()
+    output = "Initiative Tracker\n"
+    for row in sorted_rows:
+        row = "".join(element.ljust(10) for element in row)
+        output += row + "\n"
+    return output
+
+def next_player(current_player):
+    sorted_rows, sorted_names = sort_initiative()
+    player_index = sorted_names.index(current_player)
+    if player_index != len(sorted_names)-1:
+        next_player = sorted_names[player_index+1]
+    else:
+        next_player = sorted_names[0]
+    return next_player
+
+def roll_initiative(name):
+    character_df = pd.read_excel(character_sheet_path)
+    if name in character_df['name']:
+        if "initiative" in trained_lookup(name):
+            mod = 3
+        elif "initiative" in spec_lookup(name):
+            mod = 6
+        elif "initiative" in inability_lookup(name):
+            mod = -3
+        else:
+            mod = 0
+    else:
+        mod = 0
+        
+    roll = random.randint(1,20)
+    initiative_value = roll + mod
+    return initiative_value

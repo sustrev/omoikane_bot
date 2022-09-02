@@ -658,7 +658,92 @@ async def choose(ctx: interactions.CommandContext, text: str):
     choice = random.choice(options)
     await ctx.send(choice)
 
+# Initiative Tracker
+# Start accepting initiative rolls
+@bot.command(
+    name="initiative_tracker",
+    description="Initializes the initiative tracker",
+)
+async def initative_tracker(ctx: interactions.CommandContext):
+    output = cypher.track_initiative()
+    await ctx.send(output)
+    
+# Stop accepting initiative rolls
+@bot.command(
+    name="initiative_end",
+    description="Stops tracking initiative",
+)
+async def initative_end(ctx: interactions.CommandContext):
+    output = cypher.untrack_initiative()
+    await ctx.send(output)
+    
+# Roll initiative for a character
+@bot.command(
+    name="initiative",
+    description="Roll for initiative!",
+    options = [
+        interactions.Option(
+            name="character",
+            description="What character?",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def initiative(ctx: interactions.CommandContext, character: str):
+    initiative_value = cypher.roll_initiative(character)
+    output = cypher.add_initiative(character, initiative_value)
+    await ctx.send(output)
 
+# Remove initiative for a character
+@bot.command(
+    name="initiative_rm",
+    description="Remove a character from the initiative tracker",
+    options = [
+        interactions.Option(
+            name="character",
+            description="What character?",
+            type=interactions.OptionType.STRING,
+            required=True,
+        ),
+    ],
+)
+async def initiative_rm(ctx: interactions.CommandContext, character: str):
+    output = cypher.rm_initiative(character)
+    await ctx.send(output)
+    
+# Begin combat!
+tracker_button = interactions.Button(
+        style=interactions.ButtonStyle.PRIMARY,
+        label = "End Turn",
+        custom_id="turn_button"
+        )  
+
+@bot.command(
+    name="initiative_start",
+    description="Print the initiative tracker and begin!",
+)
+async def initiative_start(ctx: interactions.CommandContext):
+    output = cypher.print_initiative()
+    sorted_rows, sorted_names = cypher.sort_initiative()
+    first_up = sorted_names[0]
+    with open('Cypher/current_player.txt', 'r+', encoding='utf8') as f:
+        f.write(first_up)
+    first_up_msg = "First up is {}! Once your turn is complete, remember to hit the End Turn button to advance the tracker.".format(first_up)
+    await ctx.send(output)
+    await ctx.send(first_up_msg, components=tracker_button)
+    
+@bot.component("turn_button")
+async def turn_button_response(ctx):
+    await ctx.edit(components=None)
+    with open('Cypher/current_player.txt', 'r+', encoding='utf8') as f:
+        current_player = f.readline()
+        next_player = cypher.next_player(current_player)
+        f.seek(0)
+        f.write(next_player)
+        f.truncate()
+    output = "{}, it's your turn! Please hit End Turn once you've completed your turn.".format(next_player)
+    await ctx.send(output, components=tracker_button)
 
 
 
