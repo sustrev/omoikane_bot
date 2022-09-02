@@ -13,6 +13,11 @@ To comply with Discord's bot interaction best practices, all bot functions are c
 * /edit_inventory brings up a modal form with current inventory filled in and allows for players to edit their inventory (cyphers and equipment).
 * /edit_notes brings up a modal form with current notes filled in and allows for players to edit their notes.
 * /edit_skills brings up a modal form with current skills filled in and allows for players to edit their skills (trained, specialized, and inability).
+* /initiative rolls initiative for given character, adding a d20 roll to a modifier determined by any skill/inability in initiative and adding it to the initiative tracker list held in `Cypher/initiative_tracking_sheet.csv`.
+* /initiative_start prints a sorted list of initiatives to determine turn order, then begins iterating through the players in order with the assistance of an "End Turn" button.
+* /initiative_tracker initializes the initiative tracker and tells the bot to begin listening for and processing initiative rolls.
+* /initiative_end tells the bot to stop tracking initiative and clears the current tracking sheet.
+* /initiative_rm removes a character from the tracker (useful for fixing errors or not having to click "End Turn" for a bunch of dead mooks).
 * /recover allows players to regain points in their might, speed, or intellect pools after a rest or recovery ability. It does not allow a player to recover more points than their maximum pool value.
 * /rest rolls 1d6 + character tier level. It does not track abilities/advancements that add additional recovery points per rest.
 * /roll rolls a d20 with a Cypher-related printout. This can be used as a straight d20 roll without modifiers, or it can be used to calculate the roll with difficulty, training, assets, and effort. 
